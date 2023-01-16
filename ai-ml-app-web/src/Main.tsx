@@ -63,10 +63,8 @@ function App() {
         {result && 
           <Box className={classes.resultBox}>
             <h3>Result:</h3>
-            <Box sx={{whiteSpace: "pre"}}>
-              <b>Message:</b> {result?.message}
-              <b>Value:</b> {result?.value}
-            </Box>
+            <b>Message:</b> {result?.message}
+            <b>Value:</b> {result?.value}
           </Box>}
       </Container>
     </div>
