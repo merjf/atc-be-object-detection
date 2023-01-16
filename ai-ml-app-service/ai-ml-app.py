@@ -2,10 +2,6 @@ from flask import Flask, jsonify
 from flask_cors import CORS
 import os
 
-print('#######################')
-print('Service AI & ML Started')
-print('#######################')
-
 app = Flask(__name__)
 CORS(app)
 

@@ -13,8 +13,3 @@ export const fetchResult = () => {
   return fetch(GET_RESULT)
     .then(response => response.json())
 }
-
-export type Response = {
-  value: number[];
-  message: string;
-};
