@@ -1,0 +1,28 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# web
+
+## dependencies
+/ai-ml-app-web/node_modules
+/ai-ml-app-web/.pnp
+/ai-ml-app-web/.pnp.js
+
+## production
+/ai-ml-app-web/build
+
+## misc
+/ai-ml-app-web/.DS_Store
+/ai-ml-app-web/.env.local
+/ai-ml-app-web/.env.development.local
+/ai-ml-app-web/.env.test.local
+/ai-ml-app-web/.env.production.local
+
+/ai-ml-app-web/npm-debug.log*
+/ai-ml-app-web/yarn-debug.log*
+/ai-ml-app-web/yarn-error.log*
+
+# service
+
+## env
+/ai-ml-app-service/__pycache__
+/ai-ml-app-service/venv
