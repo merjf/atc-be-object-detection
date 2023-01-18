@@ -6,6 +6,8 @@ export type Response = {
   
 export type Image = {
     src: string,
-    value: string | ArrayBuffer | null,
-    name: string
+    value: any,
+    name: string,
+    type: string,
+    size: string
 }
