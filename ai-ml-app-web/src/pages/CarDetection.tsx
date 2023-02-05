@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { makeStyles } from "@mui/styles";
 import { Box, Button, Container, Divider } from "@mui/material";
-import { fetchResult, fetchUploadImage } from '../services/APIService'
+import { fetchCarDatasetInfo, fetchResult, fetchUploadImage } from '../services/APIService'
 import { Response, Image } from '../types/responses'
 import CleaningServicesIcon from '@mui/icons-material/CleaningServices';
 import UploadIcon from '@mui/icons-material/Upload';
@@ -34,6 +34,9 @@ const useStyles = makeStyles({
       gap: 0,
       "& > pre": {
         margin: 0
+      },
+      "& > img":{
+        maxWidth: 400,
       }
     },
     dataResultBox: {
@@ -69,6 +72,13 @@ const CarDetection = () => {
         })
       }
     }
+
+    const getCarDatasetInfo = () => {
+      fetchCarDatasetInfo()
+        .then((res) => {
+          setResult(res);
+        })
+    }
   
     const cleanData = () => {
       setResult(undefined);
@@ -86,7 +96,7 @@ const CarDetection = () => {
                   </Button>
               }
               {image &&
-                  <Button variant="contained" startIcon={<ImageIcon />} component="label" onClick={uploadImage}> 
+                  <Button variant="contained" startIcon={<ImageIcon />} component="label" onClick={getCarDatasetInfo}> 
                   Upload
                   </Button>
               }
@@ -106,7 +116,8 @@ const CarDetection = () => {
               {result && 
                   <Box className={classes.dataResultBox}>
                     <h3>Data Result:</h3>
-                    <b>Message:</b> {result?.message}
+                    <b>Class:</b> {result?.class}
+                    <b>Accuracy:</b> {result?.accuracy}
                   </Box>
               }
             </Box>

@@ -2,8 +2,11 @@ from flask import Flask, jsonify, request, flash, request, redirect
 from flask_cors import CORS, cross_origin
 from werkzeug.utils import secure_filename
 import os
+import carDetectionService
 
 app = Flask(__name__)
+
+model = carDetectionService.Model()
 
 CORS(app, expose_headers='Authorization')
 
@@ -31,9 +34,10 @@ def uploadImage():
 
 @app.route("/car-dataset-info", methods=['GET'])
 def getCarDatasetInfo():
+    [className, accuracy] = model.testImage("./data/test/test.jpg")
     response = {
-        'value': [1, 2, 3],
-        'message': "Something went wrong!"
+        'accuracy': accuracy,
+        'class': className
     }
     return jsonify(response)
 
@@ -41,3 +45,4 @@ if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
     app.secret_key = os.urandom(24)
     app.run(debug=True, host="0.0.0.0", port=port, use_reloader=False)
+
