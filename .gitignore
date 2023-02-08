@@ -3,26 +3,26 @@
 # web
 
 ## dependencies
-/ai-ml-app-web/node_modules
-/ai-ml-app-web/.pnp
-/ai-ml-app-web/.pnp.js
+/web/node_modules
+/web/.pnp
+/web/.pnp.js
 
 ## production
-/ai-ml-app-web/build
+/web/build
 
 ## misc
-/ai-ml-app-web/.DS_Store
-/ai-ml-app-web/.env.local
-/ai-ml-app-web/.env.development.local
-/ai-ml-app-web/.env.test.local
-/ai-ml-app-web/.env.production.local
+/web/.DS_Store
+/web/.env.local
+/web/.env.development.local
+/web/.env.test.local
+/web/.env.production.local
 
-/ai-ml-app-web/npm-debug.log*
-/ai-ml-app-web/yarn-debug.log*
-/ai-ml-app-web/yarn-error.log*
+/web/npm-debug.log*
+/web/yarn-debug.log*
+/web/yarn-error.log*
 
 # service
 
 ## env
-/ai-ml-app-service/__pycache__
-/ai-ml-app-service/venv
+/service/__pycache__
+/service/venv
