@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { makeStyles } from "@mui/styles";
 import { Box, Button, Container, Divider } from "@mui/material";
-import { fetchCarModelTesting, fetchResult, fetchUploadImage } from '../services/APIService'
+import { fetchCarModelTesting, fetchCarDatasetInfo } from '../services/APIService'
 import { Response, Image } from '../types/responses'
 import CleaningServicesIcon from '@mui/icons-material/CleaningServices';
 import UploadIcon from '@mui/icons-material/Upload';
@@ -63,15 +63,6 @@ const CarDetection = () => {
         size: file.size
       });
     }
-  
-    const uploadImage = () => {
-      if(image){
-        fetchUploadImage(image)
-          .then((res) => {
-            setResult(res);
-        })
-      }
-    }
 
     const getCarDatasetInfo = () => {
       if(image){
@@ -112,10 +103,9 @@ const CarDetection = () => {
                   <Box className={classes.previewImageBox}>
                     <h3>Preview image:</h3>
                     <img src={image.src} />
-                    <pre>{image.name}</pre>
                   </Box>
               }
-              {result && 
+              {result &&
                   <Box className={classes.dataResultBox}>
                     <h3>Data Result:</h3>
                     <b>Class:</b> {result?.class}
