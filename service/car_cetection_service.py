@@ -30,13 +30,13 @@ class Model:
             if(currentCheckpoint == EPOCHS):
                 self.createModel()
                 self.model.load_weights(latest)
-            # else:
-            #     [self.model, train_ds, val_ds, num_classes] = self.createModel()
-            #     self.model.load_weights(latest)
-            #     self.trainModel(train_ds, val_ds, num_classes, currentCheckpoint)
-        # else: 
-        #     [self.model, train_ds, val_ds, num_classes] = self.createModel()
-        #     self.trainModel(train_ds, val_ds, num_classes)
+            else:
+                [self.model, train_ds, val_ds, num_classes] = self.createModel()
+                self.model.load_weights(latest)
+                self.trainModel(train_ds, val_ds, num_classes, currentCheckpoint)
+        else: 
+            [self.model, train_ds, val_ds, num_classes] = self.createModel()
+            self.trainModel(train_ds, val_ds, num_classes)
             
     def createModel(self):
         print("create")
@@ -90,40 +90,6 @@ class Model:
             epochs=epochs,
             callbacks=[cp_callback]
         )
-
-        data_augmentation = keras.Sequential([
-            layers.RandomFlip("horizontal", input_shape=(self.img_height, self.img_width, 3)),
-            layers.RandomRotation(0.1),
-            layers.RandomZoom(0.1),
-        ])
-
-        self.model = Sequential([
-            data_augmentation,
-            layers.Rescaling(1./255),
-            layers.Conv2D(16, 3, padding='same', activation='relu'),
-            layers.MaxPooling2D(),
-            layers.Conv2D(32, 3, padding='same', activation='relu'),
-            layers.MaxPooling2D(),
-            layers.Conv2D(64, 3, padding='same', activation='relu'),
-            layers.MaxPooling2D(),
-            layers.Dropout(0.2),
-            layers.Flatten(),
-            layers.Dense(128, activation='relu'),
-            layers.Dense(num_classes, name="outputs")
-        ])
-
-        self.model.compile(optimizer='adam',
-            loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
-            metrics=['accuracy'])
-
-        epochs = EPOCHS * 2 - currentCheckpoint
-        history = self.model.fit(
-            train_ds,
-            validation_data=val_ds,
-            epochs=epochs,
-            callbacks=[cp_callback]
-        )
-        self.model.save_weights(CHECKPOINT_PATH.format(epoch=60))
 
     def testModel(self, imageUrl):
         print(imageUrl)
