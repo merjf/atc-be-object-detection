@@ -14,8 +14,6 @@
 - docker run -p 5000:5000 -d gateway-app
 
 ## Service addresses
-- Gateway App: 127.0.0.1:5001
-- React App: 127.0.0.1:5002
+- React App: 127.0.0.1:5001
+- Gateway App: 127.0.0.1:5002
 - Car Detection Service: 127.0.0.1:5003
-- Gateway App: 127.0.0.1:5004
-- Gateway App: 127.0.0.1:5005

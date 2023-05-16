@@ -20,11 +20,11 @@ const useStyles = makeStyles({
 });
 
 const TabPanel = (props: TabPanelProps) => {
-    const { children, currentTab, index } = props;
+    const { children, currentTab, index, ...other } = props;
     const classes = useStyles();
-  
+
     return (
-      <Box role="tabpanel" hidden={currentTab !== index} id={`simple-tabpanel-${index}`} aria-labelledby={`simple-tab-${index}`}>
+      <Box role="tabpanel" hidden={currentTab !== index} id={`simple-tabpanel-${index}`} aria-labelledby={`simple-tab-${index}`} {...other}>
         {currentTab === index && children}
       </Box>
     );

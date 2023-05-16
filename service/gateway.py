@@ -6,7 +6,6 @@ from flask import Flask, jsonify, request, flash, redirect
 from flask_cors import CORS
 import util
 
-
 app = Flask("__main__")
 CORS(app, expose_headers='Authorization')
 
