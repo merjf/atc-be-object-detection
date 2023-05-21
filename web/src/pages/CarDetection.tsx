@@ -2,7 +2,7 @@ import { useState } from "react";
 import { makeStyles } from "@mui/styles";
 import { Box, Button, Container, Divider } from "@mui/material";
 import { fetchCarModelTesting, fetchCarDatasetInfo } from '../services/APIService'
-import { Response, Image } from '../types/responses'
+import { Response, Image } from '../models/responses'
 import CleaningServicesIcon from '@mui/icons-material/CleaningServices';
 import UploadIcon from '@mui/icons-material/Upload';
 import ImageIcon from '@mui/icons-material/Image';

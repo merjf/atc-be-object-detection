@@ -1,4 +1,4 @@
-import { Image } from "../types/responses";
+import { Image } from "../models/responses";
 
 const IP = "http://127.0.0.1:5002/"
 const CAR_RESULT_INFO = IP + "car-dataset-info"

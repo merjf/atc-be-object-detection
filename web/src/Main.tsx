@@ -1,14 +1,13 @@
 import { useState } from "react";
 import { makeStyles } from "@mui/styles";
-import { Box, Container, Tab, Tabs } from "@mui/material";
+import { AppBar, Box, Container, Divider, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Tab, Tabs, Toolbar } from "@mui/material";
 import Header from './components/Header'
 import Footer from './components/Footer'
 import CarDetection from './pages/CarDetection'
 import MusicRecommandation from './pages/MusicRecommandation'
 import AppRecommandation from './pages/AppRecommandation'
-import MonteCarloEstimation from './pages/MonteCarloEstimation'
-import { useEffect } from "react";
-import TabPanel from "./components/TabPanel";
+import { theme } from './utils/Utils';
+import MonteCarloEstimation from "./pages/MonteCarloEstimation";
 
 const useStyles = makeStyles({
   main: {
@@ -18,6 +17,22 @@ const useStyles = makeStyles({
       marginBottom: 50
     }
   },
+  navBar: {
+    maxHeight: 70,
+  },
+  menuBar: {
+    [theme?.breakpoints.down('sm')]: {
+      display: "none"
+    },
+    [theme?.breakpoints.down('sm')]: {
+      display: "none"
+    },
+    '& .MuiDrawer-paper': {
+      marginTop: 65,
+      boxSizing: 'border-box',
+      width: 240
+    }
+  }
 });
 
 interface SubsetTab{
@@ -26,102 +41,102 @@ interface SubsetTab{
 }
 
 function App() {
-  const classes = useStyles();
+  const classes = useStyles(theme);
 
-  const [currentMainTab, setCurrentMainTab] = useState(0);
-  const [currentSubsetTabs, setCurrentSubsetTabs] = useState<SubsetTab[]>([]);
-  const [currentSubTab, setCurrentSubTab] = useState(10);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [selectedPage, setSelectedPage] = useState(0);
 
-  const handleChangeMainTab = (event: React.SyntheticEvent, newTab: number) => {
-    setCurrentMainTab(newTab);
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
   };
 
-  const handleChangeSubTab = (event: React.SyntheticEvent, newTab: number) => {
-    setCurrentSubTab((newTab+20));
-  };
-
-  const tabPanelProps = (index : number) => {
-    return {
-      id: `simple-tab-${index}`,
-      'aria-controls': `simple-tabpanel-${index}`,
-    };
-  }
-
-  useEffect(() => {
-    switch(currentMainTab){
-      case 0:
-        setCurrentSubTab(10)
-        setCurrentSubsetTabs([{
-          id: 10,
-          label: 'Monte Carlo Estimation'}]);
-        break;
-      case 1:
-        setCurrentSubTab(20)
-        setCurrentSubsetTabs([{
-          id: 20,
-          label: 'Car Detection'
-        },{
-          id: 21,
-          label: 'Music Recommendation'
-        },{
-          id: 22,
-          label: 'Play Store App Recommendation'
-        }]);
-        break;
-      default:
-        setCurrentMainTab(0)
-        setCurrentSubTab(10)
-        break;
+  const pages = [{
+      topic: "AI & ML",
+      pages: [{
+        name: "Car Detection",
+        index: 0
+      }],
+    },{
+      topic: "Reports",
+      pages: [{
+        name: "Music Recommendation",
+        index: 1
+      },{
+        name: "Play Store App Recommendation",
+        index: 2
+      }]
+    },{
+      topic: "Maths",
+      pages: [{
+        name: "Monte Carlo Estimation",
+        index: 3
+      }]
     }
-  }, [currentMainTab])
+  ]
+
+  const getCurrentPage = () => {
+    switch(selectedPage){
+      case 0:
+        return <CarDetection />;
+      case 1:
+        return <MusicRecommandation />;
+      case 2:
+        return <AppRecommandation />;
+      case 3:
+        return <MonteCarloEstimation />;
+    }
+  }
   
   return (
     <div className="App">
       <Header />
+      <AppBar position="fixed" className={classes.navBar}>
+          <Toolbar>
+            Application Collector
+          </Toolbar>
+        </AppBar>
+        <Drawer variant="temporary" open={mobileOpen} onClose={handleDrawerToggle} className={classes.menuBar} ModalProps={{ keepMounted: true, }} >
+          <Box>
+            <List>
+              {pages.map((topic, index) => (
+                <Box key={topic.topic}>
+                  <ListItem disablePadding>
+                      <ListItemText primary={topic.topic} />
+                  </ListItem>
+                  {topic.pages.map((page, index) => (
+                      <ListItem key={page.index} disablePadding>
+                          <ListItemButton onClick={() => setSelectedPage(page.index)}>
+                              <ListItemText primary={page.name} />
+                          </ListItemButton> 
+                      </ListItem>
+                  ))}
+              </Box>
+              ))}
+            </List>
+          </Box>
+        </Drawer>
+        <Drawer variant="permanent" className={classes.menuBar} open>
+          <Box>
+            <List>
+              {pages.map((topic, index) => (
+                <Box key={topic.topic}>
+                  <ListItem disablePadding>
+                      <ListItemText primary={topic.topic} />
+                  </ListItem>
+                  {topic.pages.map((page, index) => (
+                      <ListItem key={page.index} disablePadding>
+                          <ListItemButton onClick={() => setSelectedPage(page.index)}>
+                              <ListItemText primary={page.name} />
+                          </ListItemButton> 
+                      </ListItem>
+                  ))}
+              </Box>
+              ))}
+            </List>
+          </Box>
+        </Drawer>
       <Container maxWidth={"lg"} className={classes.main}>
-        <Box component="nav" sx={{ borderBottom: 1, borderColor: 'divider' }} >
-          <Tabs value={currentMainTab} onChange={handleChangeMainTab} aria-label="Sections" centered>
-            <Tab label="Math Apps" {...tabPanelProps(0)}/>
-            <Tab label="AI & ML Apps" {...tabPanelProps(1)}/>
-          </Tabs>
-          <TabPanel currentTab={currentMainTab} index={0}>
-            <Tabs value={currentSubTab} onChange={handleChangeSubTab} aria-label="Services" centered>
-              {currentSubsetTabs.map( (subTab) => {
-                return (
-                  <Tab key={subTab.id} label={subTab.label} {...tabPanelProps(subTab.id)}/>
-                )
-              })}
-            </Tabs>
-          </TabPanel>
-          <TabPanel currentTab={currentMainTab} index={1}>
-            <Tabs value={currentSubTab} onChange={handleChangeSubTab} aria-label="Services" centered>
-              {currentSubsetTabs.map( (subTab) => {
-                return (
-                  <Tab key={subTab.id} label={subTab.label} {...tabPanelProps(subTab.id)}/>
-                )
-              })}
-            </Tabs>
-          </TabPanel>
-        </Box>
-        <TabPanel currentTab={10} index={10}>
-          <MonteCarloEstimation />
-        </TabPanel>
-        {/* <TabPanel currentTab={currentMainTab} index={0}>
-          <TabPanel currentTab={currentSubTab} index={10}>
-            <MonteCarloEstimation />
-          </TabPanel>
-        </TabPanel>
-        <TabPanel currentTab={currentMainTab} index={1}>
-          <TabPanel currentTab={currentSubTab} index={20}>
-            <CarDetection />
-          </TabPanel>
-          <TabPanel currentTab={currentSubTab} index={21}>
-            <MusicRecommandation />
-          </TabPanel>
-          <TabPanel currentTab={currentSubTab} index={22}>
-            <AppRecommandation />
-          </TabPanel>
-        </TabPanel> */}
+        {getCurrentPage()}
       </Container>
       <Footer />
     </div>
