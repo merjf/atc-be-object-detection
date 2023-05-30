@@ -14,7 +14,7 @@ CHECKPOINT_DIR = os.path.dirname(CHECKPOINT_PATH)
 BATCH_SIZE = 32
 IMG_HEIGHT = 180
 IMG_WIDTH = 180
-EPOCHS = 3
+EPOCHS = 2
 
 class Model:
     def __init__(self):
@@ -94,11 +94,11 @@ class Model:
         img_array = tf.expand_dims(img_array, 0)
 
         predictions = self.model.predict(img_array)
-        values = []
+        predictionsResponse = []
         for prediction in predictions:
             score = tf.nn.softmax(prediction)
-            values.append({
+            predictionsResponse.append({
                 "accuracy": 100 * np.max(score),
-                "classes": self.class_names[np.argmax(score)]
+                "model": self.class_names[np.argmax(score)]
             })
-        return values
+        return predictionsResponse

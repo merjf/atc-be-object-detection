@@ -12,6 +12,12 @@ CORS(app, expose_headers='Authorization')
 
 @app.route("/test-model", methods=['POST'])
 def testModel():
+    predictions = []
+    message = "error"
+    response = {
+        'predictions': predictions,
+        'message': message
+    }
     if request.method == 'POST':
         if 'file' not in request.files:
             flash('No file part')
@@ -23,26 +29,14 @@ def testModel():
         img = Image.open(file)
         img = img.convert('L')
         img.save('./data/test/test.jpg')
-        response = {}
         if(img):
-            values = carModel.testModel("./data/test/test.jpg")
-            response = {
-                'predictions': values[0]['accuracy'],
-                'classes': values[0]['classes'],
-                'message': 'ok'
-            }
-        else:
-            response = {
-                'predictions': [],
-                'classes': [],
-                'message': 'error'
-            }
+            message = "ok"
+            predictions = carModel.testModel("./data/test/test.jpg")
+        response = {
+            'predictions': predictions,
+            'message': message
+        }
         return jsonify(response)
-    response = {
-        'predictions': [],
-        'classes': [],
-        'message': 'error'
-    }
     return jsonify(response)
 
 if __name__ == "__main__":
