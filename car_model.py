@@ -14,7 +14,7 @@ CHECKPOINT_DIR = os.path.dirname(CHECKPOINT_PATH)
 BATCH_SIZE = 32
 IMG_HEIGHT = 180
 IMG_WIDTH = 180
-EPOCHS = 3
+EPOCHS = 2
 
 class Model:
     def __init__(self):
