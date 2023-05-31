@@ -4,4 +4,4 @@
 - py -m  pipreqs.pipreqs --force .
 - py -3 -m venv --system-site-packages venv
 - source venv/Scripts/activate
-- py -3 -m car_detection_service
+- py -3 -m gateway_service
