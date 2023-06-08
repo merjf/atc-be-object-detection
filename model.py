@@ -7,41 +7,46 @@ from tensorflow import keras
 from tensorflow.keras import layers
 from tensorflow.keras.models import Sequential
 
-DATASET = "flowers"
-DATASET_PATH = "./data/"+DATASET+"/"
-CHECKPOINT_PATH = "./model_checkpoints/"+DATASET+"/cp-{epoch:04d}.ckpt"
-CHECKPOINT_DIR = os.path.dirname(CHECKPOINT_PATH)
-
 BATCH_SIZE = 32
 IMG_HEIGHT = 180
 IMG_WIDTH = 180
-EPOCHS = 5
+EPOCHS = 2
+
+class Settings:
+    def __init__(self, dataset):
+        self.DATASET = dataset
+        self.DATASET_PATH = "./data/"+self.DATASET+"/"
+        self.CHECKPOINT_PATH = "./model_checkpoints/"+self.DATASET+"/cp-{epoch:04d}.ckpt"
+        self.CHECKPOINT_DIR = os.path.dirname(self.CHECKPOINT_PATH)
+    def getCheckpointDir(self):
+        return self.CHECKPOINT_DIR
+    def getCheckpointPath(self):
+        return self.CHECKPOINT_PATH
+    def getDatasetPath(self):
+        return self.DATASET_PATH
 
 class Model:
-    def __init__(self):
-        print("init model")
-        print("########")
-        print(DATASET_PATH)
-        print("########")
-        print(CHECKPOINT_DIR)
-        print("########")
-        if os.path.exists(CHECKPOINT_DIR):
-            latest = tf.train.latest_checkpoint(CHECKPOINT_DIR)
+    def __init__(self, dataset):
+        settings = Settings(dataset)
+        print("init model - dataset: ", dataset)
+        if os.path.exists(settings.getCheckpointDir()):
+            latest = tf.train.latest_checkpoint(settings.getCheckpointDir())
             if(latest):
                 currentCheckpoint = int(re.search(r'\d+', latest).group())
-                if(currentCheckpoint <= EPOCHS):
-                    [self.model, train_ds, val_ds, num_classes] = self.createModel("load model")
-                    self.model.load_weights(latest)
+                [self.model, train_ds, val_ds, num_classes] = self.createModel("load model", settings)
+                self.model.load_weights(latest)
+                if(currentCheckpoint < EPOCHS):
+                    self.trainModel(train_ds, val_ds, num_classes, settings, currentCheckpoint)
             else:
-                [self.model, train_ds, val_ds, num_classes] = self.createModel("create model")
-                self.trainModel(train_ds, val_ds, num_classes)
+                [self.model, train_ds, val_ds, num_classes] = self.createModel("create model", settings)
+                self.trainModel(train_ds, val_ds, num_classes, settings)
         else: 
-            [self.model, train_ds, val_ds, num_classes] = self.createModel()
-            self.trainModel(train_ds, val_ds, num_classes)
+            [self.model, train_ds, val_ds, num_classes] = self.createModel("create model", settings)
+            self.trainModel(train_ds, val_ds, num_classes, settings)
             
-    def createModel(self, debug):
+    def createModel(self, debug, settings):
         print(debug)
-        data_dir = pathlib.Path(DATASET_PATH)
+        data_dir = pathlib.Path(settings.getDatasetPath())
         
         train_ds = tf.keras.utils.image_dataset_from_directory(
             data_dir,
@@ -80,9 +85,9 @@ class Model:
 
         return [model, train_ds, val_ds, num_classes]
 
-    def trainModel(self, train_ds, val_ds, num_classes, currentCheckpoint=0):
+    def trainModel(self, train_ds, val_ds, num_classes, settings, currentCheckpoint=0):
         print("train model")
-        cp_callback = tf.keras.callbacks.ModelCheckpoint(filepath=CHECKPOINT_PATH, save_weights_only=True, verbose=1, save_freq='epoch')
+        cp_callback = tf.keras.callbacks.ModelCheckpoint(filepath=settings.getCheckpointPath(), save_weights_only=True, verbose=1, save_freq='epoch')
 
         epochs = EPOCHS - currentCheckpoint
         history = self.model.fit(
