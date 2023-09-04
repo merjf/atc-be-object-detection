@@ -9,7 +9,9 @@ import model
 app = Flask(__name__)
 CORS(app, expose_headers='Authorization')
 
-@app.route("/load-dataset", methods=['GET'])
+PREFIX = "/atc-be-object-detection"
+
+@app.route(PREFIX + "/load-dataset", methods=['GET'])
 def selectDataset():
     dataset = request.args.get('dataset')
     message = 'Dataset not found'
@@ -32,7 +34,7 @@ def selectDataset():
     }
     return jsonify(response)
 
-@app.route("/test-model", methods=['POST'])
+@app.route(PREFIX + "/test-model", methods=['POST'])
 def testModel():
     if(model.model):
         predictions = []
@@ -68,4 +70,4 @@ def testModel():
 
 if __name__ == "__main__":
     app.secret_key = os.urandom(24)
-    app.run(debug=True, host="127.0.0.1", port=5003, use_reloader=False)
+    app.run(debug=True, host="localhost", port=5003, use_reloader=False)
